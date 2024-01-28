@@ -4,7 +4,7 @@
 TARGET_GOARCH := amd64
 
 GOGEN := go generate
-GOBUILD := go build
+GOBUILD := CGO_ENABLED=0 go build -ldflags="-s -w"
 
 BPF_SRC := ./bpf/sock_trace.c
 BPF_OBJ := kprobemultisocktrace_bpfel_x86.o kprobesocktrace_bpfel_x86.o
