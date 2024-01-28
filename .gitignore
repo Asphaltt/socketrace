@@ -19,3 +19,14 @@
 
 # Go workspace file
 go.work
+
+# VSCode
+.vscode
+
+# bpf generated files
+*_bpfel*
+*_bpfeb*
+
+# Current project files
+/socketrace
+*.log
