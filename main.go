@@ -45,6 +45,11 @@ func main() {
 		log.Fatalf("failed to load kernel spec: %s", err)
 	}
 
+	if flags.ListFuncs != "" {
+		socketrace.ListFuncs(flags.ListFuncs, btfSpec)
+		return
+	}
+
 	funcs, err := socketrace.GetFuncsSock(flags.FilterFuncs, btfSpec)
 	if err != nil {
 		log.Fatalf("failed to get sock funcs: %s", err)

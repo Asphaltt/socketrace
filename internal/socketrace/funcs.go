@@ -9,6 +9,7 @@ import (
 	"log"
 	"os"
 	"regexp"
+	"sort"
 
 	"github.com/cilium/ebpf/btf"
 )
@@ -104,4 +105,30 @@ func getFuncs(pattern, structName string, spec *btf.Spec) (Funcs, error) {
 	}
 
 	return funcs, nil
+}
+
+func ListFuncs(structName string, spec *btf.Spec) {
+	funcs, err := getFuncs("", structName, spec)
+	if err != nil {
+		log.Fatalf("failed to get funcs: %s", err)
+	}
+
+	positions := []string{"", "1st", "2nd", "3rd", "4th", "5th"}
+	fns := GetFuncsByPos(funcs)
+	for pos := 1; pos <= 5; pos++ {
+		fns, ok := fns[pos]
+		if !ok {
+			continue
+		}
+
+		fmt.Printf("With 'struct %s *' as the %s parameter's type, total %d functions:\n",
+			structName, positions[pos], len(fns))
+		sort.Strings(fns)
+		for _, fn := range fns {
+			fmt.Printf("  %s\n", fn)
+		}
+		fmt.Println()
+	}
+
+	fmt.Printf("Total: %d\n", len(funcs))
 }

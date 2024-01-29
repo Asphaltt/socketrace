@@ -38,6 +38,8 @@ type Flags struct {
 	OutputLimitLines uint
 
 	KprobeWay string
+
+	ListFuncs string
 }
 
 func ParseFlags() (*Flags, error) {
@@ -62,6 +64,8 @@ func ParseFlags() (*Flags, error) {
 	flag.UintVar(&f.OutputLimitLines, "output-limit-lines", 0, "limit output lines, 0 means no limit")
 
 	flag.StringVar(&f.KprobeWay, "kprobe-way", "", "specify kprobe way, kprobe or kprobe-multi, empty means auto detect")
+
+	flag.StringVar(&f.ListFuncs, "list-funcs", "", "list trace-able functions with specified parameter name, like sock in 'struct sock *'")
 
 	flag.Parse()
 
