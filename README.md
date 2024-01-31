@@ -20,14 +20,14 @@ empty, it can be mounted with `mount -t debugfs none /sys/kernel/debug`.
 
 The following kernel configs are required:
 
-|           Option         |                         Note                         |
-| ------------------------ | ---------------------------------------------------- |
-|CONFIG_DEBUG_INFO_BTF=y|available >= 5.3|
-|CONFIG_BPF=y||
-|CONFIG_BPF_SYSCALL=y||
-|CONFIG_KPROBES=y||
-|CONFIG_FUNCTION_TRACER=y|/sys/kernel/debug/tracing/available_filter_functions|
-|CONFIG_FPROBE=y|--kprobe-way kprobe-multi >= 5.18|
+|           Option         | kprobe-way   |                         Note                         |
+| ------------------------ | ------------ | ---------------------------------------------------- |
+|CONFIG_DEBUG_INFO_BTF=y   | both         | available >= 5.3 |
+|CONFIG_BPF=y              | both         | |
+|CONFIG_BPF_SYSCALL=y      | both         | |
+|CONFIG_KPROBES=y          | both         | |
+|CONFIG_FUNCTION_TRACER=y  | kprobe-multi | /sys/kernel/debug/tracing/available_filter_functions |
+|CONFIG_FPROBE=y           | kprobe-multi | available >= 5.18 |
 
 You can use `zgrep $OPTION /proc/config.gz` to check if the option is enabled.
 
