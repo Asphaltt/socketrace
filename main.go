@@ -117,7 +117,20 @@ func main() {
 		}
 
 		if useKprobeMulti {
-			opts := link.KprobeMultiOptions{Symbols: funcs}
+			ptrs := make([]uintptr, 0, len(fns))
+			for _, fn := range funcs {
+				if addr, ok := addrs.Name2AddrMap[fn]; ok {
+					ptrs = append(ptrs, addr...)
+				} else {
+					bar.Increment()
+					continue
+				}
+			}
+			if len(ptrs) == 0 {
+				continue
+			}
+
+			opts := link.KprobeMultiOptions{Addresses: ptrs}
 			kpm, err := link.KprobeMulti(prog, opts)
 			if err != nil {
 				log.Fatalf("failed to attach kprobe-multi: %v", err)
@@ -128,8 +141,14 @@ func main() {
 			for _, fn := range funcs {
 				kp, err := link.Kprobe(fn, prog, nil)
 				if err != nil {
-					log.Fatalf("failed to attach kprobe: %v", err)
+					if !errors.Is(err, os.ErrNotExist) && !errors.Is(err, syscall.EADDRNOTAVAIL) {
+						log.Fatalf("failed to attach kprobe: %v", err)
+					} else {
+						bar.Increment()
+						continue
+					}
 				}
+
 				links = append(links, kp)
 				bar.Increment()
 
