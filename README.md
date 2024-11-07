@@ -88,7 +88,7 @@ CPU PROCESS                          FUNC
 make
 ```
 
-## Credits
+## Acknowledgements
 
 Thanks to [pwru](github.com/cilium/pwru). `socketrace` is inspired by `pwru`.
 And some of its source code is borrowed from `pwru`.
